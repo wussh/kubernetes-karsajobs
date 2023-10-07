@@ -1,26 +1,31 @@
-# API version
+# Specifies the API version being used for this Kubernetes resource.
 apiVersion: v1
 
-# Kind is a string value representing the REST resource this object represents
-# Service is a named abstraction of software service
+# Specifies the type of resource, which is a "Service" in this case.
 kind: Service
 
 metadata:
-  # Name of the service
+  # Name for this Service resource.
   name: mongo
-  # Deployment namespace
+
+  # Namespace in which the Service will be created.
   namespace: wush
-  # Map of string keys and values that can be used to organize and categorize (scope and select) objects.
+
+  # Labels are key-value pairs used for organizing and selecting objects.
+  # Here, we label this Service as part of the "mongo" application.
   labels:
     app: mongo
 
 spec:
-  # Label selector for pods
+  # Defines a label selector to match pods that this Service should expose.
   selector:
     app: mongo
-  # The list of ports that are exposed by this service.
+
+  # List of ports to be exposed by this Service.
   ports:
-  # The port that will be exposed by this service.
-  - port: 27017
-  # IP address of the service and is usually assigned randomly
+    # Specifies the port number that will be exposed by this Service.
+    - port: 27017
+
+  # The "clusterIP" setting is set to "None," which means the Service won't be accessible via a cluster IP address.
+  # This is often used for headless services when you don't need a stable IP.
   clusterIP: None

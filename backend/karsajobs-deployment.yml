@@ -1,59 +1,56 @@
-# API version
+# This section defines the API version being used for this Kubernetes resource.
 apiVersion: apps/v1
 
-# Kind is a string value representing the REST resource this object represents
-# "Deployment" enables declarative updates for Pods and ReplicaSets.
+# Specifies the type of resource, which is a "Deployment" in this case.
 kind: Deployment
 
 metadata:
-
-  # Deployment name
+  # Name for this Deployment resource.
   name: karsajobs
 
-  # Deployment namespace
+  # Namespace in which the Deployment will be created.
   namespace: wush
 
-  # Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services.
+  # Labels are key-value pairs used for organizing and selecting objects.
+  # Here, we label this Deployment as part of the "backend" application.
   labels:
     app: backend
-spec:
 
-  # Number of desired pods. This is a pointer to distinguish between explicit zero and not specified. Defaults to 1.
+spec:
+  # The number of desired replicas (pods) for this Deployment.
   replicas: 1
 
-  # Label selector for pods
+  # Defines the selector used to match pods managed by this Deployment.
   selector:
     matchLabels:
       app: backend
 
-  # Template describes the pods that will be created.
+  # Describes the pod template that this Deployment will create.
   template:
     metadata:
+      # Labels applied to pods created from this template.
       labels:
         app: backend
     spec:
-
-      # List of containers belonging to the pod
+      # List of containers within the pod.
       containers:
-      
-      # Name of the container
-      - name: karsajobs
-        # Image to be used for container
-        image: ghcr.io/wussh/a433-microservices:karsajobs
-        # Image pull policy. "IfNotPresent" means that kubelet pulls if the image isn't present on disk
-        imagePullPolicy: IfNotPresent
-        # List of ports to expose from the container
-        ports:
-        # Number of port to expose on the pod's IP address
-        - containerPort: 8080
-        # List of environment variables to set in the container
-        env:
-          - name: APP_PORT
-            value: "8080"
-          - name: MONGO_HOST
-            value: mongo
-          - name: MONGO_USER
-            # Source for the environment variable's value
-            value: root
-          - name: MONGO_PASS
-            value: toor
+        # Name of the container.
+        - name: karsajobs
+          # Docker image to be used for this container.
+          image: ghcr.io/wussh/a433-microservices:karsajobs
+          # Defines when the image should be pulled. "IfNotPresent" means pull if not already on the node.
+          imagePullPolicy: IfNotPresent
+          # Ports to be exposed from the container.
+          ports:
+            # Specifies the container port to expose on the pod's IP address.
+            - containerPort: 8080
+          # List of environment variables to set within the container.
+          env:
+            - name: APP_PORT
+              value: "8080"
+            - name: MONGO_HOST
+              value: mongo
+            - name: MONGO_USER
+              value: root
+            - name: MONGO_PASS
+              value: toor

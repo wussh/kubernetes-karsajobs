@@ -1,59 +1,69 @@
-# API version
+# Specifies the API version being used for this Kubernetes resource.
 apiVersion: v1
 
-# Kind is a string value representing the REST resource this object represents
-# PersistentVolume (PV) is a storage resource provisioned by an administrator
+# Specifies the type of resource, which is a "PersistentVolume" in this case.
 kind: PersistentVolume
 
 metadata:
-  # name of the PV
+  # Name for this PersistentVolume resource.
   name: mongo-pv
-  # PV namespace
+
+  # Namespace in which the PersistentVolume will be created.
   namespace: wush
-  # Map of string keys and values that can be used to organize and categorize (scope and select) objects.
+
+  # Labels are key-value pairs used for organizing and categorizing objects.
+  # Here, we label this PersistentVolume as "type: local."
   labels:
     type: local
 
 spec:
-  # PV resource capacity
+  # Defines the capacity of the PersistentVolume.
   capacity:
-    # Size of the storage
+    # Specifies the size of the storage, which is 1 Gigabyte.
     storage: 1Gi
-  # The way of the PV will be accessed
+
+  # Defines the access modes for the PersistentVolume.
   accessModes:
+    # Allows ReadWriteOnce access mode, meaning it can be mounted by a single node for both reading and writing.
     - ReadWriteOnce
-  # "persistentVolumeReclaimPolicy" defines what happens to a persistent volume when released from its claim
+
+  # Defines the policy for reclaiming the PersistentVolume when it's released.
   persistentVolumeReclaimPolicy: Recycle
-  # storageClassName is the name of StorageClass to which this persistent volume belongs
+
+  # Specifies the StorageClass to which this PersistentVolume belongs.
   storageClassName: manual
-  # Directory on the host
+
+  # Defines the host path where the volume will be mounted on the host machine.
   hostPath:
-    # path of the directory on the host
+    # Specifies the path of the directory on the host machine.
     path: "/data/db"
 ---
 
-# API version
+# Specifies the API version being used for this Kubernetes resource.
 apiVersion: v1
 
-# Kind is a string value representing the REST resource this object represents
-# PersistentVolumeClaim is a user's request for and claim to a persistent volume
+# Specifies the type of resource, which is a "PersistentVolumeClaim" in this case.
 kind: PersistentVolumeClaim
 
 metadata:
-  # Name of the PV Claim
+  # Name for this PersistentVolumeClaim resource.
   name: mongo-pv-claim
-  # PV Claim namespace
+
+  # Namespace in which the PersistentVolumeClaim will be created.
   namespace: wush
 
 spec:
-  # Name of the StorageClass required by the claim
+  # Specifies the name of the StorageClass required by the claim.
   storageClassName: manual
-  # resources represent the minimum resources the volume should have
+
+  # Defines the minimum resources required by the volume.
   resources:
-    # Minimum amount of compute resources required
+    # Specifies the minimum amount of compute resources required.
     requests:
-      # Size of the storage
+      # Specifies the size of the storage requested, which is 1 Gigabyte.
       storage: 1Gi
-  # The way of the PV will be accessed
+
+  # Defines the access modes for the claim.
   accessModes:
+    # Allows ReadWriteOnce access mode, meaning it can be mounted by a single node for both reading and writing.
     - ReadWriteOnce

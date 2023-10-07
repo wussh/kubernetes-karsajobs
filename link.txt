@@ -1,0 +1,5 @@
+Backend
+ghcr.io/wussh/a433-microservices:karsajobs
+
+Frontend
+ghcr.io/wussh/a433-microservices:karsajobs-ui

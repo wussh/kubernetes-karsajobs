@@ -1,26 +1,31 @@
-# API version
+# Specifies the API version being used for this Kubernetes resource.
 apiVersion: v1
 
-# Kind is a string value representing the REST resource this object represents
-# Service is a named abstraction of software service
+# Specifies the type of resource, which is a "Service" in this case.
 kind: Service
 
 metadata:
-  # Name of the service
+  # Name for this Service resource.
   name: karsajobs-ui
-  # Deployment namespace
+
+  # Namespace in which the Service will be created.
   namespace: wush
-  # Map of string keys and values that can be used to organize and categorize (scope and select) objects.
+
+  # Labels are key-value pairs used for organizing and selecting objects.
+  # Here, we label this Service as part of the "frontend" application.
   labels:
     app: frontend
 
 spec:
-  # Label selector for pods
+  # Defines a label selector to match pods that this Service should expose.
   selector:
     app: frontend
-  # The list of ports that are exposed by this service.
+
+  # List of ports to be exposed by this Service.
   ports:
-  # The port that will be exposed by this service.
-  - port: 8000
-  # Type of the service to be exposed
+    # Specifies the port number that will be exposed by this Service.
+    - port: 8000
+
+  # Specifies the type of Service to expose:
+  # - NodePort: Exposes the Service on a port across all nodes in the cluster.
   type: NodePort

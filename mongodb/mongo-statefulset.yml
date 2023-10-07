@@ -1,67 +1,71 @@
-# API version
+# Specifies the API version being used for this Kubernetes resource.
 apiVersion: apps/v1
 
-# Kind is a string value representing the REST resource this object represents
-# StatefulSet represents a set of pods with consistent identities
+# Specifies the type of resource, which is a "StatefulSet" in this case.
 kind: StatefulSet
 
 metadata:
-  # StatefulSet name
+  # Name for this StatefulSet resource.
   name: mongo
-  # StatefulSet namespace
+
+  # Namespace in which the StatefulSet will be created.
   namespace: wush
-  # Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services.
+
+  # Labels are key-value pairs used for organizing and selecting objects.
+  # Here, we label this StatefulSet as part of the "mongo" application.
   labels:
     app: mongo
 
 spec:
 
-  # Label selector for pods
+  # Defines a label selector to match pods managed by this StatefulSet.
   selector:
     matchLabels:
       app: mongo
 
-  # name of the service that governs this StatefulSet
+  # Specifies the name of the service that governs this StatefulSet.
   serviceName: mongo
 
-  # Minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to be considered available.
+  # Minimum number of seconds for which a newly created pod should be ready without any container crashing for it to be considered available.
   minReadySeconds: 10
 
-  # Number of desired pods. This is a pointer to distinguish between explicit zero and not specified. Defaults to 1.
+  # The number of desired pods. Defaults to 1.
   replicas: 1
 
-  # Template describes the pods that will be created.
+  # Describes the pod template that this StatefulSet will create.
   template:
     metadata:
       labels:
         app: mongo
     spec:
 
-      # Optional duration in seconds the pod needs to terminate gracefully.
+      # Optional duration in seconds that the pod needs to terminate gracefully.
       terminationGracePeriodSeconds: 10
 
-      # List of containers belonging to the pod
+      # List of containers belonging to the pod.
       containers:
 
-        # Name of the container
+        # Name of the container.
       - name: mongo
-        # Image to be used for container. It will pull from Docker Hub
+        # Docker image to be used for the container, pulling from Docker Hub.
         image: mongo:4.2.24-bionic
-        # Image pull policy. "IfNotPresent" means that kubelet pulls if the image isn't present on disk
+
+        # Image pull policy. "IfNotPresent" means that kubelet pulls the image if it isn't already present on the node.
         imagePullPolicy: IfNotPresent
-        # List of environment variables to set in the container
+
+        # List of environment variables to set in the container.
         env: 
         - name: MONGO_INITDB_ROOT_USERNAME_FILE
           value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
         - name: MONGO_INITDB_ROOT_PASSWORD_FILE
           value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
 
-        # List of environment variables to set in the container
+        # List of ports to expose from the container.
         ports:
-        # Number of port to expose on the pod's IP address
         - containerPort: 27017
           name: mongo
-        # Pod volumes to mount into the container's filesystem
+
+        # Pod volumes to mount into the container's filesystem.
         volumeMounts:
         - name: mongo-persistent-storage
           mountPath: /data/db
@@ -72,20 +76,19 @@ spec:
 
       # List of volumes that can be mounted by containers belonging to the pod.
       volumes:
-      # Name of the volume as described on "volumeMounts"
       - name: mongo-persistent-storage
         # Reference to a PersistentVolumeClaim in the same namespace.
         persistentVolumeClaim:
-          # Name of a PersistentVolumeClaim in the same namespace as the pod using this volume
+          # Name of a PersistentVolumeClaim in the same namespace as the pod using this volume.
           claimName: mongo-pv-claim
       - name: mongo-config
-        # Represents a configMap that should populate this volume
+        # Represents a ConfigMap that should populate this volume.
         configMap:
           name: mongo-config
           items: 
             - key: mongo.conf
               path: mongo.conf
       - name: mongo-secret
-        # Represents a secret that should populate this volume.
+        # Represents a Secret that should populate this volume.
         secret:
           secretName: mongo-secret
