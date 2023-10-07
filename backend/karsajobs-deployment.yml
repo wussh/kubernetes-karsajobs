@@ -1,0 +1,59 @@
+# API version
+apiVersion: apps/v1
+
+# Kind is a string value representing the REST resource this object represents
+# "Deployment" enables declarative updates for Pods and ReplicaSets.
+kind: Deployment
+
+metadata:
+
+  # Deployment name
+  name: karsajobs
+
+  # Deployment namespace
+  namespace: wush
+
+  # Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services.
+  labels:
+    app: backend
+spec:
+
+  # Number of desired pods. This is a pointer to distinguish between explicit zero and not specified. Defaults to 1.
+  replicas: 1
+
+  # Label selector for pods
+  selector:
+    matchLabels:
+      app: backend
+
+  # Template describes the pods that will be created.
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+
+      # List of containers belonging to the pod
+      containers:
+      
+      # Name of the container
+      - name: karsajobs
+        # Image to be used for container
+        image: ghcr.io/wussh/a433-microservices:karsajobs
+        # Image pull policy. "IfNotPresent" means that kubelet pulls if the image isn't present on disk
+        imagePullPolicy: IfNotPresent
+        # List of ports to expose from the container
+        ports:
+        # Number of port to expose on the pod's IP address
+        - containerPort: 8080
+        # List of environment variables to set in the container
+        env:
+          - name: APP_PORT
+            value: "8080"
+          - name: MONGO_HOST
+            value: mongo
+          - name: MONGO_USER
+            # Source for the environment variable's value
+            value: root
+          - name: MONGO_PASS
+            value: toor
